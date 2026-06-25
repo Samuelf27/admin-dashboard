@@ -35,6 +35,8 @@ Um **painel administrativo completo** como os usados em produtos corporativos �
 - 🔔 Sistema de **toasts**, estados de **carregamento** (skeletons) e vazio
 - ⚙️ **CI/CD** — build e deploy automáticos no GitHub Pages via GitHub Actions
 
+<p align="center"><img src="https://raw.githubusercontent.com/Samuelf27/admin-dashboard/main/preview-users.png" alt="Tela de usuários (CRUD)" width="820" /></p>
+
 ## 🛠️ Stack
 
 | Camada | Tecnologia |
