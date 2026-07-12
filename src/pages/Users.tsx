@@ -24,6 +24,7 @@ const EMPTY: FormState = { name: '', email: '', role: 'Viewer', status: 'Ativo' 
 export default function Users() {
   const { notify } = useToast();
   const [users, setUsers] = useState<User[] | null>(null);
+  const [error, setError] = useState(false);
   const [search, setSearch] = useState('');
   const [sort, setSort] = useState<{ key: SortKey; dir: 'asc' | 'desc' }>({ key: 'name', dir: 'asc' });
   const [page, setPage] = useState(1);
@@ -35,7 +36,13 @@ export default function Users() {
   const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({});
   const [saving, setSaving] = useState(false);
 
-  useEffect(() => { api.listUsers().then(setUsers); }, []);
+  function loadUsers() {
+    setError(false);
+    setUsers(null);
+    api.listUsers().then(setUsers).catch(() => setError(true));
+  }
+
+  useEffect(() => { loadUsers(); }, []);
 
   const filtered = useMemo(() => {
     if (!users) return [];
@@ -50,6 +57,11 @@ export default function Users() {
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PER_PAGE));
   const pageItems = filtered.slice((page - 1) * PER_PAGE, page * PER_PAGE);
+
+  // Mantém a página dentro do intervalo válido após remoções/filtros.
+  useEffect(() => {
+    setPage((p) => Math.min(Math.max(1, p), totalPages));
+  }, [totalPages]);
 
   function toggleSort(key: SortKey) {
     setSort((s) => ({ key, dir: s.key === key && s.dir === 'asc' ? 'desc' : 'asc' }));
@@ -147,7 +159,16 @@ export default function Users() {
               </tr>
             </thead>
             <tbody>
-              {users === null ? (
+              {error ? (
+                <tr>
+                  <td colSpan={6} className="px-5 py-10 text-center text-slate-400">
+                    Erro ao carregar usuários.
+                    <button onClick={loadUsers} className="ml-2 font-medium text-brand-600 hover:underline">
+                      Tentar novamente
+                    </button>
+                  </td>
+                </tr>
+              ) : users === null ? (
                 Array.from({ length: 6 }).map((_, i) => (
                   <tr key={i} className="border-b border-slate-100 dark:border-slate-800">
                     <td colSpan={6} className="px-5 py-4"><div className="h-5 animate-pulse rounded bg-slate-200 dark:bg-slate-800" /></td>

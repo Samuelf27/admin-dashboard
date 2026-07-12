@@ -14,7 +14,7 @@ Painel administrativo de nível profissional: autenticação, CRUD completo, tab
 
 <p align="center">
   <a href="https://samuelf27.github.io/admin-dashboard/"><b>🔗 Ver demo ao vivo</b></a>
-  &nbsp;·&nbsp; 🔑 <code>admin@empresa.com</code> / <code>123456</code>
+  &nbsp;·&nbsp; 🔑 Login de demonstração — <code>admin@empresa.com</code> / <code>123456</code> (ou qualquer e-mail válido + senha de 4+ caracteres)
 </p>
 
 <p align="center"><img src="https://raw.githubusercontent.com/Samuelf27/admin-dashboard/main/preview.png" alt="Preview do painel" width="820" /></p>
@@ -27,7 +27,7 @@ Um **painel administrativo completo** como os usados em produtos corporativos �
 
 ## ✨ Funcionalidades
 
-- 🔐 **Autenticação** com rota protegida e sessão persistida
+- 🔐 **Login de demonstração (mock)** com rota protegida e sessão persistida — validação apenas no cliente (qualquer e-mail com `@` e senha de 4+ caracteres entra; o token é fictício e descartado). **Não é segurança de produção.**
 - 👥 **CRUD completo de usuários** — criar, editar e remover com **modal e validação**
 - 🔎 **Tabela de dados** com **busca**, **ordenação por coluna** e **paginação**
 - 📈 **Dashboard** com KPIs e gráficos (área e pizza) via Recharts

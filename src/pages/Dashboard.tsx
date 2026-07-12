@@ -13,12 +13,19 @@ export default function Dashboard() {
   const [metrics, setMetrics] = useState<Metric[] | null>(null);
   const [sales, setSales] = useState<SalesPoint[] | null>(null);
   const [cats, setCats] = useState<CategorySlice[] | null>(null);
+  const [error, setError] = useState(false);
 
-  useEffect(() => {
-    api.getMetrics().then(setMetrics);
-    api.getSales().then(setSales);
-    api.getCategories().then(setCats);
-  }, []);
+  function load() {
+    setError(false);
+    setMetrics(null); setSales(null); setCats(null);
+    Promise.all([
+      api.getMetrics().then(setMetrics),
+      api.getSales().then(setSales),
+      api.getCategories().then(setCats),
+    ]).catch(() => setError(true));
+  }
+
+  useEffect(() => { load(); }, []);
 
   return (
     <div className="space-y-6">
@@ -26,6 +33,13 @@ export default function Dashboard() {
         <h1 className="text-2xl font-bold">Visão geral</h1>
         <p className="text-sm text-slate-500">Acompanhe os principais indicadores do negócio.</p>
       </div>
+
+      {error && (
+        <div className="flex items-center justify-between gap-3 rounded-2xl border border-rose-200 bg-rose-50 px-5 py-4 text-sm text-rose-700 dark:border-rose-500/30 dark:bg-rose-500/10 dark:text-rose-400">
+          <span>Erro ao carregar os dados do dashboard.</span>
+          <button onClick={load} className="font-semibold hover:underline">Tentar novamente</button>
+        </div>
+      )}
 
       {/* KPIs */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
