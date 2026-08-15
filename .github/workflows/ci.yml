@@ -1,0 +1,22 @@
+name: CI
+
+# O deploy.yml ja valida `main` (roda npm run build antes de publicar).
+# Este workflow cobre o que faltava: pull requests. Sem ele, os PRs do
+# Dependabot — inclusive majors como react-router 6->7 e recharts 2->3 —
+# chegavam sem nenhum check, e mergear era voo cego.
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      # `npm run build` = tsc --noEmit && vite build — typecheck e build juntos.
+      - run: npm run build
